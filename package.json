@@ -1,0 +1,16 @@
+{
+  "name": "openai-gas",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Tomoya Chiba",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/google-apps-script": "^1.0.68",
+    "typescript": "^5.2.2"
+  }
+}
