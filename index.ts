@@ -1,21 +1,31 @@
 /**
- * @param {string} systemPrompt - The prompt to be used to generate the completion.
- * @param {string} userPrompt - The prompt to be used to generate the completion.
+ * Completes the prompt using OpenAI's API.
+ * @param {string|string[]} systemPrompt - The prompt to be used to generate the completion.
+ * @param {string|string[]} userPrompt - The prompt to be used to generate the completion.
  * @param {string} options - The options to be used to generate the completion.
  * @return {string} The completion result.
  * @customfunction
  */
 function OpenAIComplete(
-  systemPrompt: string,
-  userPrompt: string,
+  systemPrompt: string | string[][],
+  userPrompt: string | string[][],
   options?: string
 ): string {
+  const systemPrompts = [systemPrompt]
+    .flat(2)
+    .filter((prompt) => prompt?.length);
+  const userPrompts = [userPrompt].flat(2).filter((prompt) => prompt?.length);
+
   const messages: OpenAIMessage[] = [
-    { role: "system", content: systemPrompt },
-    { role: "user", content: userPrompt },
+    ...systemPrompts.map(
+      (prompt) => ({ role: "system", content: prompt } as OpenAIMessage)
+    ),
+    ...userPrompts.map(
+      (prompt) => ({ role: "user", content: prompt } as OpenAIMessage)
+    ),
   ];
 
-  const key = `${options || "{}"}:${systemPrompt}:${userPrompt}`;
+  const key = `${options || "{}"}:${systemPrompts}:${userPrompts}`;
 
   return withCache(key, () => {
     const response = callOpenAICompletion(
